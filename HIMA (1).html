@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💖 Start A New Life, Hima 💖</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffe6f7 0%, #f3e8ff 100%);
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .card {
+      animation: fadeInUp 1s ease-out forwards;
+      box-shadow: 0 0 40px rgba(255, 192, 203, 0.6);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .sparkle {
+      background: linear-gradient(90deg, #ec4899, #d8b4fe, #f472b6);
+      background-size: 300% 300%;
+      animation: shimmer 5s infinite linear;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .heart {
+      position: fixed;
+      bottom: -10px;
+      color: #ff69b4;
+      font-size: 1.5rem;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.8;
+      z-index: 10;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 0.8; }
+      100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255,192,203,0.6); }
+      50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,182,193,1); }
+    }
+
+    .pulse { animation: pulse 1.8s infinite; }
+
+    .fade-in {
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .fade-in.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="confetti"></canvas>
+
+  <div id="mainCard" class="card max-w-xl w-full bg-white rounded-3xl shadow-2xl p-8 text-center border-4 border-pink-300">
+    <h1 class="sparkle text-4xl font-extrabold mb-6">
+      💖 FORGET EVERYTHING, START A NEW LIFE 💖
+    </h1>
+
+    <button
+      id="openBtn"
+      class="pulse bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-10 rounded-full text-xl shadow-lg transition duration-300 transform active:scale-95 focus:outline-none focus:ring-4 focus:ring-pink-300"
+    >
+      🌸 Click To Begin 🌸
+    </button>
+
+    <div id="messageContainer" class="fade-in mt-8 hidden">
+      <h2 class="text-2xl font-semibold mb-4 text-purple-500">
+        🌷 My Dearest Hima 🌷
+      </h2>
+
+      <p class="text-gray-700 italic mb-6 text-lg leading-relaxed">
+        ✨ Life may have cloudy days, but remember — even clouds make the sunset prettier.  
+        This isn’t the end, it’s your sparkling *new sunrise* 🌅.  
+        You’re stronger than you think, sweeter than you believe, and more loved than you know 💞.
+      </p>
+
+      <div class="bg-pink-100 p-4 rounded-xl border border-pink-300 mb-6">
+        <p class="text-pink-700 font-medium">
+          🌈 Go grab your favorite treat 🍰, dance to your favorite song 🎶,  
+          and let the world see your glow ✨ — because the best chapter of your story  
+          starts *right now*! 💕
+        </p>
+      </div>
+
+      <p class="text-2xl font-extrabold text-purple-700 mt-6 sparkle">
+        💫 NODHAN IS HERE ALWAYS 💫
+      </p>
+    </div>
+  </div>
+
+  <!-- 🌸 Background Music -->
+  <audio id="bgMusic" src="https://cdn.pixabay.com/download/audio/2023/03/06/audio_9f6c8a69b1.mp3?filename=gentle-piano-melody-140132.mp3" preload="auto"></audio>
+
+  <script>
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let confettis = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    class Confetti {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * -canvas.height;
+        this.size = Math.random() * 6 + 3;
+        this.color = `hsl(${Math.random() * 360}, 100%, 75%)`;
+        this.speedY = Math.random() * 3 + 1;
+        this.speedX = Math.random() - 0.5;
+      }
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        if (this.y > canvas.height) this.reset();
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 150; i++) confettis.push(new Confetti());
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettis.forEach(c => { c.update(); c.draw(); });
+      requestAnimationFrame(animateConfetti);
+    }
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerHTML = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+
+    const openBtn = document.getElementById("openBtn");
+    const messageContainer = document.getElementById("messageContainer");
+    const bgMusic = document.getElementById("bgMusic");
+
+    openBtn.addEventListener("click", () => {
+      openBtn.classList.add("opacity-0", "scale-90");
+      openBtn.style.pointerEvents = "none";
+      animateConfetti();
+      setInterval(createHeart, 400);
+
+      // Play and fade in background music 🎶
+      bgMusic.volume = 0;
+      bgMusic.play();
+      let vol = 0;
+      const fadeIn = setInterval(() => {
+        if (vol < 0.4) {
+          vol += 0.02;
+          bgMusic.volume = vol;
+        } else {
+          clearInterval(fadeIn);
+        }
+      }, 200);
+
+      setTimeout(() => {
+        openBtn.style.display = "none";
+        messageContainer.classList.remove("hidden");
+        setTimeout(() => { messageContainer.classList.add("active"); }, 100);
+      }, 500);
+    });
+  </script>
+<audio id="bgMusic" src="YOUR-MUSIC-LINK.mp3"></audio>
+</body>
+</html>
